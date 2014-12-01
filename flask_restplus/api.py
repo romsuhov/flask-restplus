@@ -177,7 +177,7 @@ class Api(restful.Api):
 
         # If blueprint is already registered, force URL declaration
         if self.blueprint_setup:
-            kwargs['endpoint'] = str('{0}.{1}'.format(self.blueprint.name, kwargs['endpoint']))
+            kwargs['endpoint'] = str('{0}'.format(kwargs['endpoint']))
             self._register_view(self.blueprint_setup.app, resource, *urls, **kwargs)
         else:
             super(Api, self).add_resource(resource, *urls, **kwargs)
