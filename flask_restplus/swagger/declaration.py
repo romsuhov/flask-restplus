@@ -110,6 +110,9 @@ class ApiDeclaration(SwaggerBaseView):
         method_impl = self.get_method(resource, method)
         if method_impl:
             params = self.update_params(params, method_impl)
+        for param in params:
+            if param['type'] in self.api.models:
+                self.register_model(param['type'])
         return params
 
     def update_params(self, params, obj, method=None):
