@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from flask.ext.restful import fields as base_fields
+from .model import ApiModel
 
 
 class DescriptionMixin(object):
@@ -56,8 +57,17 @@ class Raw(DetailsMixin, base_fields.Raw):
 class Nested(DescriptionMixin, base_fields.Nested):
     pass
 
+class Dict(dict):
+    pass
 
 class List(DetailsMixin, base_fields.List):
+    def __init__(self, cls_or_instance, **kwargs):
+        if isinstance(cls_or_instance, ApiModel):
+            model = Dict(cls_or_instance)
+            model.__apidoc__ = cls_or_instance.__apidoc__
+            cls_or_instance = Nested(model)
+            cls_or_instance.__apidoc__ = model.__apidoc__
+        super(List, self).__init__(cls_or_instance, **kwargs)
     pass
 
 
