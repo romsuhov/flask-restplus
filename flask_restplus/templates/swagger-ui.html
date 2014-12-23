@@ -14,13 +14,16 @@
                     log("Loaded SwaggerUI");
 
                     if(typeof initOAuth == "function") {
-                        /*
+                        
                         initOAuth({
                             clientId: "your-client-id",
                             realm: "your-realms",
                             appName: "your-app-name"
                         });
-                        */
+                        
+                        window.swaggerUi.tokenName = "access_token";
+                        auth = Object({access_token: "{{ debug_token }}", token_type: "Bearer", expires_in: "3600", scope: "all"});
+                        onOAuthComplete(auth);
                     }
                     $('pre code').each(function(i, e) {
                         hljs.highlightBlock(e)

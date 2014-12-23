@@ -99,6 +99,7 @@ class Api(restful.Api):
         self.license_url = license_url
         self.endpoint = endpoint
         self.authorizations = authorizations
+        self.debug_token = kwargs.pop('debug_token','')
 
         self.models = {}
         self.namespaces = []
@@ -148,7 +149,7 @@ class Api(restful.Api):
 
     def render_ui(self):
         '''Override this method to customize the documentation page'''
-        return render_template('swagger-ui.html', api_endpoint=self.endpoint, specs_url=self.specs_url)
+        return render_template('swagger-ui.html', api_endpoint=self.endpoint, specs_url=self.specs_url, debug_token=self.debug_token)
 
     def swagger_static(self, filename):
         return url_for(
