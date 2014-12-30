@@ -580,7 +580,12 @@ SwaggerModel.prototype.createJSONSample = function(modelsToIgnore) {
     modelsToIgnore.push(this.name);
     for (var i = 0; i < this.properties.length; i++) {
       prop = this.properties[i];
-      result[prop.name] = prop.getSampleValue(modelsToIgnore);
+      if ('defaultValue' in prop) {
+        result[prop.name] = prop.defaultValue;
+      }
+      else {
+        result[prop.name] = prop.getSampleValue(modelsToIgnore);
+      }
     }
     modelsToIgnore.pop(this.name);
     return result;
@@ -593,13 +598,8 @@ var SwaggerModelProperty = function(name, obj) {
   this.isCollection = this.dataType && (this.dataType.toLowerCase() === 'array' || this.dataType.toLowerCase() === 'list' || this.dataType.toLowerCase() === 'set');
   this.descr = obj.description;
   this.required = obj.required;
-  if (obj.items != null) {
-    if (obj.items.type != null) {
-      this.refDataType = obj.items.type;
-    }
-    if (obj.items.$ref != null) {
-      this.refDataType = obj.items.$ref;
-    }
+  if ('defaultValue' in obj) {
+    this.defaultValue = obj.defaultValue;
   }
   this.dataTypeWithRef = this.refDataType != null ? (this.dataType + '[' + this.refDataType + ']') : this.dataType;
   if (obj.allowableValues != null) {
