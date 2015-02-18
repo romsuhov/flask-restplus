@@ -583,6 +583,9 @@ SwaggerModel.prototype.createJSONSample = function(modelsToIgnore) {
       if ('defaultValue' in prop) {
         result[prop.name] = prop.defaultValue;
       }
+      else if ((!('required' in prop) || !prop.required) && !('defaultValue' in prop)){
+        result[prop.name] = null;
+      }
       else {
         result[prop.name] = prop.getSampleValue(modelsToIgnore);
       }
@@ -600,6 +603,14 @@ var SwaggerModelProperty = function(name, obj) {
   this.required = obj.required;
   if ('defaultValue' in obj) {
     this.defaultValue = obj.defaultValue;
+  }
+  if (obj.items != null) {
+    if (obj.items.type != null) {
+      this.refDataType = obj.items.type;
+    }
+    if (obj.items.$ref != null) {
+      this.refDataType = obj.items.$ref;
+    }
   }
   this.dataTypeWithRef = this.refDataType != null ? (this.dataType + '[' + this.refDataType + ']') : this.dataType;
   if (obj.allowableValues != null) {
