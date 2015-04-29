@@ -584,7 +584,12 @@ SwaggerModel.prototype.createJSONSample = function(modelsToIgnore) {
         result[prop.name] = prop.defaultValue;
       }
       else if ((!('required' in prop) || !prop.required) && !('defaultValue' in prop)){
-        result[prop.name] = null;
+        if (prop.isCollection){
+          result[prop.name] = prop.getSampleValue(modelsToIgnore);
+        }
+        else {
+          result[prop.name] = null;
+        }
       }
       else {
         result[prop.name] = prop.getSampleValue(modelsToIgnore);
